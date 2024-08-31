@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Website</title>
+    <style>
+        body {
+            font-family: "Myriad Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        #container {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1000px;
+            flex-wrap: nowrap;  /* Prevents wrapping */
+            align-items: flex-start;  /* Keeps items aligned at the top */
+        }
+
+        #content {
+            flex: 1;  /* Allow content to take up remaining space */
+            width: 70%;
+            line-height: 1.6;
+            margin-top: 30px;
+            padding-right: 20px;
+            box-sizing: border-box;
+        }
+
+        #links {
+            width: 200px;  /* Fixed width for links */
+            margin-top: 30px;
+            text-align: right;
+            box-sizing: border-box;
+            flex-shrink: 0;  /* Prevents shrinking */
+            align-self: flex-start;  /* Ensures links stay at the top */
+            position: sticky;  /* Keeps links at the top when scrolling */
+            top: 20px;  /* Keeps the links at the top with some margin */
+        }
+
+        .post {
+            display: none;
+            font-size: 16px;
+        }
+
+        .post h2 {
+            font-weight: bold;
+            font-size: 18px;
+            margin-top: 5px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: #0066cc;
+            font-size: 16px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            #container {
+                flex-direction: column-reverse;  /* Stack content below links */
+                align-items: flex-start;
+            }
+
+            #content, #links {
+                width: 100%;
+                text-align: left;
+                padding: 0;
+                margin: 10px 0;
+            }
+
+            #links {
+                position: relative;  /* Reset position to default on small screens */
+                text-align: left;
+            }
+
+            .post h2 {
+                font-size: 16px;
+            }
+
+            a {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="content">
+            <div id="post2" class="post">
+                <h2>About</h2>
+                <img src="ben.png" style="max-width: 250px; height: auto;">
+                <p>Currently, I live in Camps Bay, South Africa, and work at <a href="https://neurabuild.com">Neurabuild</a>. I grew up around the Helderberg and studied at Stellies.</p>
+                <p>Email: <a href="mailto:benblaine@gmail.com">benblaine@gmail.com</a></p>
+                <p>I try to spend time with: <a href="https://www.lucahart.com/">Luca</a>, computers, rock climbing, building products, family, the internet, friends, games, surfing, guitar, making things, doing things, lifting weights, sprinting on beaches - in no specific order.</p>
+                <p>I love being a part of making things people still use: <a href="https://snapscan.co.za">Snapscan</a>, <a href="https://offerzen.com">Offerzen</a>, <a href="https://www.investec.com/en_za/banking/tech-professionals/programmable-banking.html">Investec Programmable Banking</a>, <a href="https://www.neurabuild.com/our-projects">Synapse, Readup, EcoEar.</a></p>
+                <p>And I've painfully loved making things people don't use anymore.</p>
+                <p> I'm <a href="https://github.com/benblaine">benblaine</a> on GitHub and <a href="https://x.com/benblainex">benblainex</a> on x.com</p>
+            </div>
+            <div id="post1" class="post">
+                <h2>BLUF - "bottom line up front"</h2>
+                <p><strong>State the crux of your message in the first line.</strong></p>
+                <p>This is the essence of BLUF.</p>
+                <p>Ever been stuck in a conversation, but you're mentally a million miles away on a beach somewhere, the sun is shining, the weather is good? You might go surfing later. Maybe not.</p>
+                <p>Snapping back to reality, you realize someone's blabbing on and you have no idea what they're saying.</p>
+                <p>This is the importance of stating the bottom line up front.</p>
+                <p>To me, it feels counterintuitive. My head says to me: "but if you start with the final point, why would they listen to the rest?"</p>
+                <p>In reality, it helps the person you're speaking to focus their attention on what you're saying, and why you're saying it. It stops their mind from traveling to far away sunny beaches.</p>
+                <p>It shows a high level of respect for their time.</p>
+                <p>And it translates particularly well to text communication.</p>
+                <p>Let's take a look at an example. Imagine you've made a miscalculation and run out of budget on a project, and you need to let your client know.</p>
+                
+                <p><strong>Email without BLUF</strong></p>
+                <p><em>Hi Sarah,</em></p>
+                <p><em>I hope you’re well. We’ve been working hard on the project, and it’s coming along nicely. However, there’s been a slight issue that I wanted to discuss with you. Unfortunately, due to some unforeseen circumstances, we’ve had to allocate more resources to certain areas than we initially planned. This has led to an overrun in our budget. I wanted to let you know about this as soon as possible so that we can discuss how to move forward.</em></p>
+                <p><em>Best regards,<br>Your Name</em></p>
+            
+                <p>Now, compare that with the BLUF version:</p>
+            
+                <p><strong>Email with BLUF</strong></p>
+                <p><em>Hi Sarah,</em></p>
+                <p><em>We're out of budget.</em></p>
+                <p><em>We’ve been working hard on the project, and it’s coming along nicely, but we had to allocate more resources than planned, which led to the budget overrun. I take full responsibility and would like to talk to you about getting the project back on track.</em></p>
+                <p><em>Would 1h on Mon, Tue, and Wed any time between 8 and 11 AM work for you? If not, let me know what suits.</em></p>
+                <p><em>Best regards,<br>Your Name</em></p>
+            </div>
+            <div id="post3" class="post">
+                <h2>Community Engineer</h2>
+                <p><strong>What is a Community Engineer?</strong></p>
+                <p><em>Disclaimer:</em> I don't really know — but I'm slowly forming my own opinion. Also: I've interpreted many of my sources, so if I got it wrong, please ping me :)</p>
+                <p>A Community Engineer¹ is someone who invents, designs, analyses, builds, and tests the materials, machines, systems, and structures that support the operation and growth of a community.</p>
+                <p>OR</p>
+                <p><em>"Engineering is figuring out how to do what you want with what you've actually got."</em> — John Carmack on The Joe Rogan Show.</p>
+                <p>So a community engineer is someone who figures out how to help a community of people do what they want with what they have.</p>
+                <p>To preface things, I'd like to take you through David Spinks' idea of what a community is…</p>
+                
+                <h3>The Definition of Community</h3>
+                <p>A community is a group of people with a shared identity². The more specific the identity, the more meaningful membership becomes.</p>
+                <p>To illustrate: a community of "people who ride mountain bikes on Table Mountain on a Saturday morning" has more meaning to members than a community of "people who ride mountain bikes."</p>
+                <p>Members would have more to talk about and share with each other. The closer you get to the core, the stronger the identity and meaning becomes.</p>
+                <img src="spinxcommunity.png" style="max-width: 500px; height: auto;">
+                <p><em>From "The Definition of Community" by David Spinks"</em>²</p>
+                
+                <h3>Community Feeling</h3>
+                <p>According to Alfred Adler³, deep happiness can be found in making a contribution towards helping others — without compromising oneself⁴. Putting the well-being of "us" above only "me" lets people transcend their own existence and plug into a greater network.</p>
+                <p>Adler called this <em>"gemeinschaftsgefühl"</em> ⁵ or "community feeling". This feeling lets people overcome a fear of being left out, giving them courage to contribute repeatedly, creating a virtuous cycle.</p>
+                <img src="communitycycle.png" style="max-width: 500px; height: auto;">
+                <p><strong>The virtuous cycle of contribution</strong></p>
+                <p>I'd like to implore you to read <em>"The Courage to Be Disliked"</em> ⁴ and <em>"The Courage to Be Happy"</em> ⁶ by Ichiro Kishimi and Fumitake Koga. They're Socratic dialogues that deep dive into Adler's way of thinking, which in my mind is foundational to building happiness for yourself and your communities.</p>
+                
+                <h3>Engineering Communities that Thrive</h3>
+                <p>Communities organically grow, operate, and die at the whim of the chaotic world. If you want to help a community thrive and become a resilient network of people, you need to engineer it.</p>
+                <p>I'd like to refer to an example from <em>Social Architecture</em>⁷, written by the late Pieter Hintjens.</p>
+                <img src="pieterhintjens.png" style="max-width: 500px; height: auto;">
+                <p><strong>The late Pieter Hintjens, a world-class community engineer</strong></p>
+                <p>In Pieter's ZeroMQ online open-source community, he found that old-timers became subject matter experts. Experts were given the power to moderate new contributions: and would generally reject them unless they met very high standards. This sounds good — but the result was that it broke the virtuous cycle of contribution and scared off new members.</p>
+                <p>To counter this, Pieter wrote a <em>Collective Code Construction Contract</em>⁸, with the high-level goal to:</p>
+                <p><em>… provide a reusable optimal collaboration model for open-source software projects.</em></p>
+                <p>To ensure new members were empowered to contribute, one of the rules of the community contract is:</p>
+                <p><em>Everyone, without distinction or discrimination, SHALL have an equal right to become a Contributor under the terms of this contract.</em></p>
+                <p>New member contributions were thus protected, and experts needed to jump in to help the newbies fix their contributions. On the other hand, bad contributions went into production and caused issues and were thus rejected on merit rather than on "expert opinion".</p>
+                
+                <h3>Connect, Create, and Change (the World)</h3>
+                <p>When people connect, they create new things and change the world. There are millions of communities all around the world doing this every day in big and small ways.</p>
+                <p>A famous example is <em>The Homebrew Computer Club</em>⁹, which accommodated Steve Jobs and Steve Wozniak and helped them develop and launch Apple Computers.</p>
+                <p>Community engineers get to set the stage to spark this connection between community members.</p>
+                <img src="wozjobs.png" style="max-width: 500px; height: auto;">
+                <p><strong>Steve Jobs and Steve Wozniak creating Apple Computers at the Homebrew Computer Club</strong></p>
+                
+                <h3>Becoming a Community Engineer</h3>
+                <p>To become a community engineer, you need to find or start a community to contribute towards.</p>
+                <p>Maybe there's a thriving community out there you can join and learn from? Maybe there's a struggling community that needs your help? Maybe there's a group of people waiting to be led as a community.</p>
+                <p>You might even already be a community engineer of some kind — you just need to recognize that and double down on getting your people together!</p>
+                <img src="thrivejam.jpg" style="max-width: 500px; height: auto;">
+                <p><strong>Me, bottom left, having a Project Thrive Jam</strong></p>
+                
+                <h3>Identifying a Community to Start // Start Engineering</h3>
+                <p>The best book on building a community that I know of is <em>Get Together</em>¹⁰. The starting point for identifying a community to join or start is to decide "who" and "why" people are part of this community.</p>
+                <p>Who do you care about; share an interest, identity, or space with; and want to help? Once you have answered these questions, you need to be able to answer…</p>
+                <p><strong>Why would members want to come together?</strong></p>
+                <p>Then you can start worrying about the what, when, where, and how.</p>
+                <img src="gettogether.png" style="max-width: 500px; height: auto;">
+                <p><strong>Get Together Book</strong></p>
+                
+                <p>Thanks for reading…</p>
+                <p>And happy community engineering! If you want to chat with me, email me at <a href="mailto:benblaine@gmail.com">benblaine@gmail.com</a> or Tweet me <a href="https://twitter.com/benblainex">@benblainex</a></p>
+                <p>Two communities I am busy contributing towards are:</p>
+                <ul>
+                    <li>The Investec Programmable Banking Beta Community, in partnership with OfferZen</li>
+                    <li>OfferZen Foundation's Project Thrive Community</li>
+                </ul>
+                <p>Cheers, Ben</p>
+            
+                <h3>References</h3>
+                <ol>
+                    <li><a href="https://en.wikipedia.org/wiki/Engineer">"Engineer - Wikipedia."</a> Accessed 23 Feb. 2020.</li>
+                    <li><a href="https://medium.com/@davidspinks/the-definition-of-community-9fc17312811f">"The Definition of 'Community' - David Spinks - Medium."</a> 11 Jan. 2018. Accessed 23 Feb. 2020.</li>
+                    <li><a href="https://en.wikipedia.org/wiki/Alfred_Adler">"Alfred Adler - Wikipedia."</a> Accessed 23 Feb. 2020.</li>
+                    <li><a href="https://www.goodreads.com/book/show/43599070-the-courage-to-be-happy">"The Courage to be Happy: True Contentment Is … - Goodreads."</a> Accessed 23 Feb. 2020.</li>
+                    <li><a href="https://en.wiktionary.org/wiki/gemeinschaftsgefuhl">"gemeinschaftsgefuhl - Wiktionary."</a> Accessed 23 Feb. 2020.</li>
+                    <li><a href="https://www.goodreads.com/book/show/43306206-the-courage-to-be-disliked">"The Courage to Be Disliked: How to Free Yourself, Change …."</a> Accessed 23 Feb. 2020.</li>
+                    <li><a href="https://www.goodreads.com/book/show/30121783-social-architecture">"Social Architecture: Building On-line Communities by Pieter …."</a> Accessed 23 Feb. 2020.</li>
+                    <li><a href="https://rfc.zeromq.org/spec/42/">"42/C4 | ZeroMQ RFC."</a> Accessed 23 Feb. 2020.</li>
+                    <li><a href="https://en.wikipedia.org/wiki/Homebrew_Computer_Club">"Homebrew Computer Club - Wikipedia."</a> Accessed 23 Feb. 2020.</li>
+                    <li><a href="https://gettogetherbook.com/">"Get Together Book | How to Build a Community With Your …."</a> Accessed 23 Feb. 2020.</li>
+                </ol>
+            </div>
+        </div>
+
+        <div id="links">
+            <ul>
+                <li><a href="#" onclick="showPost('post2')">About</a></li>
+                <li><a href="#" onclick="showPost('post1')">BLUF</a></li>
+                <li><a href="#" onclick="showPost('post3')">Community Engineer</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function showPost(postId) {
+            // Hide all posts
+            var posts = document.getElementsByClassName('post');
+            for (var i = 0; i < posts.length; i++) {
+                posts[i].style.display = 'none';
+            }
+
+            // Show the selected post
+            document.getElementById(postId).style.display = 'block';
+        }
+    </script>
+
+</body>
+</html>
