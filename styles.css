@@ -1,0 +1,98 @@
+body {
+    font-family: "Myriad Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+#container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1000px;
+    flex-wrap: nowrap;  /* Prevents wrapping */
+    align-items: flex-start;  /* Keeps items aligned at the top */
+}
+
+#content {
+    flex: 1;  /* Allow content to take up remaining space */
+    width: 70%;
+    line-height: 1.6;
+    margin-top: 30px;
+    padding-right: 20px;
+    box-sizing: border-box;
+}
+
+#links {
+    width: 200px;  /* Fixed width for links */
+    margin-top: 47px;
+    text-align: right;
+    box-sizing: border-box;
+    flex-shrink: 0;  /* Prevents shrinking */
+    align-self: flex-start;  /* Ensures links stay at the top */
+    position: sticky;  /* Keeps links at the top when scrolling */
+    top: 20px;  /* Keeps the links at the top with some margin */
+}
+
+.post {
+    display: none;
+    font-size: 16px;
+}
+
+.post h2 {
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 0px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    margin: 10px 0;
+}
+
+a {
+    text-decoration: none;
+    color: #0066cc;
+    font-size: 16px;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #container {
+        flex-direction: column-reverse;  /* Stack content below links */
+        align-items: flex-start;
+    }
+
+    #content, #links {
+        width: 100%;
+        text-align: left;
+        padding: 0;
+        margin: 10px 0;
+    }
+
+    #links {
+        position: relative;  /* Reset position to default on small screens */
+        text-align: left;
+    }
+
+    .post h2 {
+        font-size: 16px;
+    }
+
+    a {
+        font-size: 16px;
+    }
+}
