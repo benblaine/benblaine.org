@@ -77,12 +77,68 @@
             border-radius: 50%;
             background: rgba(255,255,255,.35);
         }
-        .dots i.on {
+        .dots i.on { background: #fff; }
+
+        .timers {
+            position: fixed;
+            top: calc(10px + env(safe-area-inset-top));
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 6;
+            display: flex;
+            gap: 8px;
+        }
+        .timers button {
+            appearance: none;
+            border: 2px solid #fff;
+            background: rgba(0,0,0,.55);
+            color: #fff;
+            font: 700 16px/1 "Helvetica Neue", Helvetica, Arial, sans-serif;
+            padding: 10px 16px;
+            border-radius: 999px;
+            cursor: pointer;
+            letter-spacing: 0.02em;
+        }
+        .timers button.on {
             background: #fff;
+            color: #111;
+        }
+
+        .count {
+            position: fixed;
+            left: 50%;
+            top: calc(72px + env(safe-area-inset-top));
+            transform: translateX(-50%);
+            z-index: 5;
+            pointer-events: none;
+            display: none;
+            font-size: clamp(120px, 38vw, 240px);
+            font-weight: 900;
+            font-variant-numeric: tabular-nums;
+            line-height: 0.85;
+            letter-spacing: -0.07em;
+            color: #fff;
+            text-shadow:
+                -5px -5px 0 #000, 5px -5px 0 #000,
+                -5px 5px 0 #000, 5px 5px 0 #000,
+                -5px 0 0 #000, 5px 0 0 #000,
+                0 -5px 0 #000, 0 5px 0 #000,
+                0 10px 0 #000, 0 0 28px #000;
+        }
+        .count.show { display: block; }
+        .count.warn { color: #ffe14a; }
+        .count.now {
+            color: #ff2d2d;
+            transform: translateX(-50%) scale(1.12);
         }
     </style>
 </head>
 <body>
+    <div class="timers" id="timers">
+        <button type="button" data-sec="20">20s</button>
+        <button type="button" data-sec="30">30s</button>
+    </div>
+    <div class="count" id="count" aria-hidden="true">20</div>
     <div class="feed" id="feed">
         <section class="slide" data-i="0">
             <video src="clips/01.mp4" muted loop playsinline preload="auto"></video>
@@ -121,6 +177,9 @@
     <script>
         const slides = [...document.querySelectorAll('.slide')];
         const dots = document.getElementById('dots');
+        const countEl = document.getElementById('count');
+        const timerBtns = [...document.querySelectorAll('#timers button')];
+
         slides.forEach((_, i) => {
             const el = document.createElement('i');
             if (i === 0) el.className = 'on';
@@ -128,7 +187,41 @@
         });
         const dotEls = [...dots.children];
 
+        let active = -1;
+        let duration = 0;
+        let remaining = 0;
+        let lastTs = 0;
+        let ticking = false;
+
+        function currentVideo() {
+            return slides[Math.max(active, 0)].querySelector('video');
+        }
+
+        function renderCount() {
+            if (!duration) {
+                countEl.className = 'count';
+                return;
+            }
+            const n = Math.max(0, Math.ceil(remaining));
+            countEl.textContent = String(n);
+            countEl.className = 'count show' + (n <= 3 ? ' now' : n <= 5 ? ' warn' : '');
+        }
+
+        function setDuration(sec) {
+            duration = sec;
+            remaining = sec;
+            lastTs = 0;
+            timerBtns.forEach((b) => b.classList.toggle('on', Number(b.dataset.sec) === sec));
+            renderCount();
+            if (sec && !ticking) {
+                ticking = true;
+                requestAnimationFrame(tick);
+            }
+            if (sec) currentVideo().play().catch(() => {});
+        }
+
         function setActive(i) {
+            if (i === active) return;
             slides.forEach((slide, n) => {
                 const v = slide.querySelector('video');
                 if (n === i) {
@@ -139,6 +232,41 @@
                 }
             });
             dotEls.forEach((d, n) => d.classList.toggle('on', n === i));
+            active = i;
+            if (duration) {
+                remaining = duration;
+                lastTs = 0;
+                renderCount();
+            }
+        }
+
+        function goNext() {
+            const next = (active + 1) % slides.length;
+            setActive(next);
+            slides[next].scrollIntoView({ behavior: 'auto' });
+        }
+
+        function tick(ts) {
+            if (!duration) {
+                ticking = false;
+                lastTs = 0;
+                renderCount();
+                return;
+            }
+            ticking = true;
+            if (!lastTs) lastTs = ts;
+            const dt = (ts - lastTs) / 1000;
+            lastTs = ts;
+            const v = currentVideo();
+            if (!v.paused) {
+                remaining -= dt;
+                if (remaining <= 0) {
+                    remaining = duration;
+                    goNext();
+                }
+            }
+            renderCount();
+            requestAnimationFrame(tick);
         }
 
         const io = new IntersectionObserver((entries) => {
@@ -152,6 +280,14 @@
         slides.forEach((s) => io.observe(s));
         setActive(0);
 
+        timerBtns.forEach((b) => {
+            b.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const sec = Number(b.dataset.sec);
+                setDuration(duration === sec ? 0 : sec);
+            });
+        });
+
         slides.forEach((slide) => {
             const v = slide.querySelector('video');
             slide.addEventListener('click', () => {
@@ -161,7 +297,7 @@
         });
 
         document.addEventListener('keydown', (e) => {
-            const i = dotEls.findIndex((d) => d.classList.contains('on'));
+            const i = Math.max(active, 0);
             if (e.key === 'ArrowDown' || e.key === 'j') {
                 e.preventDefault();
                 slides[Math.min(i + 1, slides.length - 1)].scrollIntoView({ behavior: 'smooth' });
@@ -176,6 +312,9 @@
                 if (v.paused) v.play();
                 else v.pause();
             }
+            if (e.key === '2') setDuration(duration === 20 ? 0 : 20);
+            if (e.key === '3') setDuration(duration === 30 ? 0 : 30);
+            if (e.key === '0' || e.key === 'Escape') setDuration(0);
         });
     </script>
 </body>
