@@ -2,26 +2,181 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#111111">
     <title>Abs</title>
     <style>
+        * { box-sizing: border-box; }
         html, body {
             margin: 0;
             height: 100%;
             background: #111;
+            color: #fff;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            overscroll-behavior: none;
         }
-        body {
+        .feed {
+            height: 100dvh;
+            overflow-y: auto;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+        .slide {
+            position: relative;
+            height: 100dvh;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
             display: flex;
             align-items: center;
             justify-content: center;
+            background: #111;
         }
         video {
-            width: 100%;
-            max-height: 100%;
+            display: block;
+            width: auto;
+            height: 100%;
+            max-width: 100%;
+            object-fit: contain;
+            background: #111;
+        }
+        .meta {
+            position: absolute;
+            left: 16px;
+            bottom: calc(28px + env(safe-area-inset-bottom));
+            z-index: 2;
+            pointer-events: none;
+            text-shadow: 0 1px 8px rgba(0,0,0,.7);
+        }
+        .meta strong {
+            display: block;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+        .meta span {
+            display: block;
+            margin-top: 4px;
+            font-size: 13px;
+            opacity: 0.7;
+        }
+        .dots {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            pointer-events: none;
+        }
+        .dots i {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.35);
+        }
+        .dots i.on {
+            background: #fff;
         }
     </style>
 </head>
 <body>
-    <video controls playsinline preload="metadata" src="abs.mp4"></video>
+    <div class="feed" id="feed">
+        <section class="slide" data-i="0">
+            <video src="clips/01.mp4" muted loop playsinline preload="auto"></video>
+            <div class="meta"><strong>Seated knee tucks</strong><span>1 / 8</span></div>
+        </section>
+        <section class="slide" data-i="1">
+            <video src="clips/02.mp4" muted loop playsinline preload="metadata"></video>
+            <div class="meta"><strong>Flutter kicks</strong><span>2 / 8</span></div>
+        </section>
+        <section class="slide" data-i="2">
+            <video src="clips/03.mp4" muted loop playsinline preload="metadata"></video>
+            <div class="meta"><strong>Dead bug</strong><span>3 / 8</span></div>
+        </section>
+        <section class="slide" data-i="3">
+            <video src="clips/04.mp4" muted loop playsinline preload="metadata"></video>
+            <div class="meta"><strong>Sit-ups</strong><span>4 / 8</span></div>
+        </section>
+        <section class="slide" data-i="4">
+            <video src="clips/05.mp4" muted loop playsinline preload="metadata"></video>
+            <div class="meta"><strong>Bicycle crunches</strong><span>5 / 8</span></div>
+        </section>
+        <section class="slide" data-i="5">
+            <video src="clips/06.mp4" muted loop playsinline preload="metadata"></video>
+            <div class="meta"><strong>Reverse crunches</strong><span>6 / 8</span></div>
+        </section>
+        <section class="slide" data-i="6">
+            <video src="clips/07.mp4" muted loop playsinline preload="metadata"></video>
+            <div class="meta"><strong>Forearm plank</strong><span>7 / 8</span></div>
+        </section>
+        <section class="slide" data-i="7">
+            <video src="clips/08.mp4" muted loop playsinline preload="metadata"></video>
+            <div class="meta"><strong>Mountain climbers</strong><span>8 / 8</span></div>
+        </section>
+    </div>
+    <div class="dots" id="dots" aria-hidden="true"></div>
+    <script>
+        const slides = [...document.querySelectorAll('.slide')];
+        const dots = document.getElementById('dots');
+        slides.forEach((_, i) => {
+            const el = document.createElement('i');
+            if (i === 0) el.className = 'on';
+            dots.appendChild(el);
+        });
+        const dotEls = [...dots.children];
+
+        function setActive(i) {
+            slides.forEach((slide, n) => {
+                const v = slide.querySelector('video');
+                if (n === i) {
+                    v.play().catch(() => {});
+                } else {
+                    v.pause();
+                    v.currentTime = 0;
+                }
+            });
+            dotEls.forEach((d, n) => d.classList.toggle('on', n === i));
+        }
+
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach((e) => {
+                if (e.isIntersecting && e.intersectionRatio >= 0.6) {
+                    setActive(Number(e.target.dataset.i));
+                }
+            });
+        }, { threshold: [0.6] });
+
+        slides.forEach((s) => io.observe(s));
+        setActive(0);
+
+        slides.forEach((slide) => {
+            const v = slide.querySelector('video');
+            slide.addEventListener('click', () => {
+                if (v.paused) v.play();
+                else v.pause();
+            });
+        });
+
+        document.addEventListener('keydown', (e) => {
+            const i = dotEls.findIndex((d) => d.classList.contains('on'));
+            if (e.key === 'ArrowDown' || e.key === 'j') {
+                e.preventDefault();
+                slides[Math.min(i + 1, slides.length - 1)].scrollIntoView({ behavior: 'smooth' });
+            }
+            if (e.key === 'ArrowUp' || e.key === 'k') {
+                e.preventDefault();
+                slides[Math.max(i - 1, 0)].scrollIntoView({ behavior: 'smooth' });
+            }
+            if (e.key === ' ') {
+                e.preventDefault();
+                const v = slides[i].querySelector('video');
+                if (v.paused) v.play();
+                else v.pause();
+            }
+        });
+    </script>
 </body>
 </html>
